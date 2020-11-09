@@ -7,7 +7,6 @@
 TODO: 
 - use recursion for GPA 2 decimal places
 - write delete, fix up links, use a destructor, and watch out for if have empty list
-- use recursion ^
 - add checks for if something is valid, especially student ID
 - add "average" function which prints GPA avg of all students to 2 dec places
 - add comments
@@ -25,35 +24,44 @@ void deleteStudent(Node* &head);
 void Average(Node* &head);
 
 void Average(Node* &head){
-
+  
   //recursion!
 }
 
 void deleteStudent(Node* &head){
   Node *ptr = head;
-  //  Node *prev = NULL;
+  Node *prev = NULL;
   Student *studentPtr = NULL;
   int id = 0;
   char yn = 'y';
-  cout << "What is the ID of the student you would like to delete? " << endl;
-  cin >> id;
-  studentPtr = ptr->getStudent();
-  if(studentPtr->getID() == id){
-    cout << studentPtr->getFirstName() << " " << studentPtr->getLastName()
-	 << ", " << studentPtr->getID() << " " << studentPtr->getGPA() << endl;
-    cout << "Would you really like to delete this student? (y/n)" << endl;
-    if(yn == 'y' || yn == 'Y'){
-      cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
-      ptr->next = ptr->next->next;
-      ptr->next->next = NULL;
-      delete studentPtr;
-    }
-    else{
-      cout << "not deleting. " << endl;
+  if(ptr != NULL){
+    prev = ptr;
+    cout << "What is the ID of the student you would like to delete? " << endl;
+    cin >> id;
+    studentPtr = ptr->getStudent();
+    if(studentPtr->getID() == id){
+      cout << studentPtr->getFirstName() << " " << studentPtr->getLastName()
+	   << ", " << studentPtr->getID() << " " << studentPtr->getGPA() << endl;
+      cout << "Would you really like to delete this student? (y/n)" << endl;
+      cin >> yn;
+      if(yn == 'y' || yn == 'Y'){
+	cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
+
+	//link up chain once deleted
+	prev->next = ptr->next;
+	ptr->next = NULL;
+	delete ptr; //call contructor to delete that node
+      }
+      else{
+	prev = ptr->next; //incrememnt previous
+	deleteStudent(ptr->next); //recursively call function
+	cout << "not deleting. " << endl;
+      }
     }
   }
-
-
+  else {
+    cout << "no students are in the list yet!" << endl;
+  }
   //head -> 1 -> 2 -> 3 -> end
 }
 
