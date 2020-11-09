@@ -62,28 +62,59 @@ bool checkID(int id, Node* &head){
 */
 void deleteStudent(Node* current, int id){
   Node *ptr = current;
-
+  //  Node *prev = NULL;
+  Node *prev = NULL;
   Student *studentPtr = NULL;
-  
+  char yn = 'y';
+  cout << "What is the ID of the student you would like to delete? " << endl;
+  cin >> id;
+   studentPtr = ptr->getStudent();
+   if(studentPtr->getID() == id){
+     cout << studentPtr->getFirstName() << " " << studentPtr->getLastName()
+	  << ", " << studentPtr->getID() << " " << studentPtr->getGPA() << endl;
+     cout << "Would you really like to delete this student? (y/n)" << endl;
+     if(yn == 'y' || yn == 'Y'){
+       cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
+       ptr->next = ptr->next->next;
+       ptr->next->next = NULL;
+       delete studentPtr;
+     }
+     else{
+       cout << "not deleting. " << endl;
+     }
+     if(ptr != NULL){
+     prev = ptr;
+     cout << "What is the ID of the student you would like to delete? " << endl;
+     cin >> id;
+     studentPtr = ptr->getStudent();
+     if(studentPtr->getID() == id){
+       cout << studentPtr->getFirstName() << " " << studentPtr->getLastName()
+ 	   << ", " << studentPtr->getID() << " " << studentPtr->getGPA() << endl;
+       cout << "Would you really like to delete this student? (y/n)" << endl;
+       cin >> yn;
+       if(yn == 'y' || yn == 'Y'){
+ 	cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
 
-	//link up chain once deleted
-	prev->next = ptr->next;
-	ptr->next = NULL;
-	delete ptr; //call contructor to delete that node
-      }
-      else{
-	prev = ptr; //increment previous
-	ptr = ptr->next;
-	deleteStudent(ptr, prev); //recursively call function
-	cout << "not deleting. " << endl;
-      }
-    }
-  }
-  else {
-    cout << "no students are in the list yet!" << endl;
-  }
-  //head -> 1 -> 2 -> 3 -> end
-}
+ 	//link up chain once deleted
+ 	prev->next = ptr->next;
+ 	ptr->next = NULL;
+ 	delete ptr; //call contructor to delete that node
+       }
+       else{
+ 	prev = ptr->next; //incrememnt previous
+ 	deleteStudent(ptr->next, id); //recursively call function
+ 	cout << "not deleting. " << endl;
+       }
+     }
+   }
+
+
+   else {
+     cout << "no students are in the list yet!" << endl;
+   }
+   //head -> 1 -> 2 -> 3 -> end
+ }
+
 
 
 //add a new student to linked list
@@ -116,7 +147,6 @@ void print(Node* &head){
 
 
 int main(){
-
   Node* head = NULL; //beginning of list
   Node *prev = NULL;
   char input[10]; //holds either add or print currently
@@ -162,8 +192,8 @@ int main(){
       cin.get();
       /*unique = checkID(id, head);
 	if(unique == true){*/
-	student->setID(id);
-	/*}
+      student->setID(id);
+      /*}
 	else {
 	cout << "That was not a unique student ID. Cannot add student. " << endl;
 	delete student;
@@ -176,32 +206,19 @@ int main(){
       if(head == NULL){
 	head = new Node(student);
       } else {
-      addStudent(head, student);
+	addStudent(head, student);
       }
     }
     else if(strcmp(input, "PRINT") == 0){
       print(head);
     }
     else if(strcmp(input, "DELETE") == 0){
-      int id = 0;
-  char yn = 'y';
-  if(ptr != NULL){
-    cout << "What is the ID of the student you would like to delete? " << endl;
-    cin >> id;
-    studentPtr = ptr->getStudent();
-    if(studentPtr->getID() == id){
-      cout << studentPtr->getFirstName() << " " << studentPtr->getLastName()
-	   << ", " << studentPtr->getID() << " " << studentPtr->getGPA() << endl;
-      cout << "Would you really like to delete this student? (y/n)" << endl;
-      cin >> yn;
-      if(yn == 'y' || yn == 'Y'){
-	cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
-
-      deleteStudent(head, prev);
+      deleteStudent(head);
     }
     else if(strcmp(input, "AVERAGE") == 0){
       Average(head, 0, 0);
     }
   }
   cout << "Now quitting. Goodbye! " << endl;
+}
 }
