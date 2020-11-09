@@ -17,4 +17,10 @@ public:
   // constructer and destructors, initializes and deletes pointers
   Node(Student* value);
   ~Node();
+  Node *next;
+  //additions by me (Allison):
+  void setStudent(Student *inputStudent);
+private:
+  Student *studentPtr;
+
 };
