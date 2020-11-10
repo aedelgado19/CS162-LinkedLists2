@@ -192,20 +192,27 @@ int main(){
       cout << "What is the ID of the student you would like to delete? " << endl;
       cin >> id;
       Student *studentPtr = head->getStudent();
-      //if id is the head's id 
-      if(studentPtr->getID() == id && head != NULL){
-	Node* ptr = head; 
-	head = head->getNext(); //change head to the next 
-	delete(ptr);
-      } else if (head != NULL){ //id wanted to delete is not the head, so proceed normally
+      if(head == NULL){ //case: user tries to delete list but there is nothing in the list
+	cout << "Error: There is no student to delete!" << endl;
+
+      } else if(studentPtr->getID() == id && head != NULL && head->getNext() == NULL){ //case: student id matches id of head, and there is nothing after it 
+	Node *temp = head;
+	head = NULL;
+	delete temp;
+	
+      } else if(studentPtr->getID() == id && head != NULL && head->getNext() != NULL){ //case: student id matches id of head, but there are more nodes after
+	Node *temp = head; //create temp pointer to head
+	head = head->getNext(); //change head to the next one
+	delete temp; //delete original head
+
+      } else { //case: id does not match head
 	deleteStudent(head, id);
-      } else {
-	cout << "There is no student to delete." << endl;
       }
     }
     else if(strcmp(input, "AVERAGE") == 0){
       Average(head, 0, 0);
     }
+    
   }
   cout << "Now quitting. Goodbye! " << endl;
 
