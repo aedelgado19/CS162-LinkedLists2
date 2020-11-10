@@ -63,7 +63,7 @@ void deleteStudent(Node* current, int id){
   Node *ptr = current;
   Student *studentPtr = NULL;
   char yn = 'y';
-  if(current->getNext() != NULL){
+  if(ptr->getNext() != NULL){
     studentPtr = ptr->getNext()->getStudent();
     if(studentPtr->getID() == id){
       cout << studentPtr->getFirstName() << " " << studentPtr->getLastName()
@@ -71,7 +71,7 @@ void deleteStudent(Node* current, int id){
       cout << "Would you really like to delete this student? (y/n)" << endl;
       if(yn == 'y' || yn == 'Y'){
 	cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
-	ptr->setNext(ptr->getNext()->getNext());
+	ptr->setNext(ptr->getNext());
 	delete studentPtr;
       }
       else{ //user requests not to delete
@@ -192,13 +192,15 @@ int main(){
       cout << "What is the ID of the student you would like to delete? " << endl;
       cin >> id;
       Student *studentPtr = head->getStudent();
-      //if id is the head
-      if(studentPtr->getID() == id && head->getNext() != NULL){
+      //if id is the head's id 
+      if(studentPtr->getID() == id && head != NULL){
 	Node* ptr = head; 
 	head = head->getNext(); //change head to the next 
 	delete(ptr);
-      } else { //id wanted to delete is not the head, so proceed normally
+      } else if (head != NULL){ //id wanted to delete is not the head, so proceed normally
 	deleteStudent(head, id);
+      } else {
+	cout << "There is no student to delete." << endl;
       }
     }
     else if(strcmp(input, "AVERAGE") == 0){
