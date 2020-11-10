@@ -191,6 +191,7 @@ int main(){
       int id = 0;
       cout << "What is the ID of the student you would like to delete? " << endl;
       cin >> id;
+      cin.get();
       if(head == NULL){ //case: user tries to delete list but there is nothing in the list	
 	cout << "Error: There is no student to delete!" << endl;
       } else { //head is not null
@@ -211,7 +212,7 @@ int main(){
 	}
 	
 	else { //case: id does not match head
-	deleteStudent(head, id);
+	  deleteStudent(head, id);
 	}
       } 
     }
