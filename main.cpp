@@ -66,18 +66,9 @@ void deleteStudent(Node* current, int id){
   if(ptr->getNext() != NULL){
     studentPtr = ptr->getNext()->getStudent();
     if(studentPtr->getID() == id){
-      cout << studentPtr->getFirstName() << " " << studentPtr->getLastName()
-	   << ", " << studentPtr->getID() << " " << studentPtr->getGPA() << endl;
-      cout << "Would you really like to delete this student? (y/n)" << endl;
-      cin >> yn;
-      cin.get();
-      if(yn == 'y' || yn == 'Y'){
 	cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
 	ptr->setNext(ptr->getNext());
 	delete studentPtr;
-      }
-      else{ //user requests not to delete
-	cout << "not deleting. " << endl;
       }
     } else {
       deleteStudent(current->getNext(), id); //recursively call delete to traverse thru list

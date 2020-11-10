@@ -14,8 +14,8 @@ Node::Node(Student* ptr1) {
 
 
 Node::~Node() {
-  delete value;
-  delete ptr;
+  delete studentPtr;
+  //  delete ptr;
 }
 
 Student* Node::getStudent() {
@@ -31,11 +31,12 @@ Student* Node::getStudent() {
 }
 
 Node* Node::getNext() {
-  return ptr;
+  return next;
+  //return ptr;
 }
 
-void Node::setNext(Node* next) {
-  ptr = next;
+void Node::setNext(Node* nextNode) {
+  next = nextNode;
 }
 
 void Node::setStudent(Student *inputStudent){
