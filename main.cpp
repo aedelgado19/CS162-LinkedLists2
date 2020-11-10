@@ -69,6 +69,8 @@ void deleteStudent(Node* current, int id){
       cout << studentPtr->getFirstName() << " " << studentPtr->getLastName()
 	   << ", " << studentPtr->getID() << " " << studentPtr->getGPA() << endl;
       cout << "Would you really like to delete this student? (y/n)" << endl;
+      cin >> yn;
+      cin.get();
       if(yn == 'y' || yn == 'Y'){
 	cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
 	ptr->setNext(ptr->getNext());
@@ -176,6 +178,7 @@ int main(){
       if(head == NULL){
 	head = new Node(student);
       } else {
+	 //call add student, which will recursively call itself to find end of list
 	addStudent(head, student);
       }
     }

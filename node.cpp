@@ -2,10 +2,16 @@
 
 #include "Node.h"
 Node::Node(Student* ptr1) {
-  value = new Student();
+  /*value = new Student();
   value = ptr1;
   ptr = NULL;
+  */
+
+  //NOTE: the above code given does not logically make sense.
+  //edit by Allison:
+  studentPtr = ptr1;
 }
+
 
 Node::~Node() {
   delete value;
@@ -13,6 +19,7 @@ Node::~Node() {
 }
 
 Student* Node::getStudent() {
+  //  return value;
   return studentPtr;
 
   /*edit by Allison: 
