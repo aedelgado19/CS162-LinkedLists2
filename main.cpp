@@ -3,16 +3,9 @@
  * Last updated: November 8, 2020
  */
 
-/*
-TODO: 
-
-- write delete, fix up links, use a destructor, and watch out for if have empty list
-- add checks for if something is valid, especially student ID
-- add comments
- */
 #include <iomanip>
 #include <iostream>
-#include "Node.h"
+#include "node.h"
 #include <cstring>
 using namespace std;
 
@@ -39,42 +32,35 @@ void Average(Node* next, float total, int count){
 }
 
 bool checkID(int id, Node* &head){
-  cout << "check id" << endl;
+
   Node *traverse = head;
   if(traverse == NULL){ //first node in list
     return true;
   }
-  while(traverse->next != NULL){
-    cout << "in loop" <<endl;
+  while(traverse->getNext() != NULL){
     traverse = traverse->getNext();
-    cout << "\nA";
-    cout << traverse->getStudent()->getID() << endl;
-    cout << "\nB";
     if(traverse->getStudent()->getID() == id){
-      cout << "\nC";
       return false;
     }
-    cout << "\nD";
   }
   return true;
 }
 
 void deleteStudent(Node* current, int id){
-  Node *ptr = current;
   Student *studentPtr = NULL;
   char yn = 'y';
-  if(ptr->getNext() != NULL){
-    studentPtr = ptr->getNext()->getStudent();
+  if(current->getNext() != NULL){
+    studentPtr = current->getNext()->getStudent();
     if(studentPtr->getID() == id){
-	cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
-	ptr->setNext(ptr->getNext());
-	delete studentPtr;
-      }
+      Node *deletenode = current->getNext(); //temporary holder to delete the node
+      cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
+      current->setNext(deletenode->getNext());
+      delete deletenode;   
     } else {
       deleteStudent(current->getNext(), id); //recursively call delete to traverse thru list
     }
   } else { //current IS null
-      cout << "no students are in the list yet!" << endl;
+    cout << "no students are in the list yet!" << endl;
   }
 }
 
@@ -102,7 +88,7 @@ void print(Node* &head){
   if(ptr != NULL){
     studentPtr = ptr->getStudent();
     cout << studentPtr->getFirstName() << " " << studentPtr->getLastName()
-	 << ", " << studentPtr->getID() << ", " << studentPtr->getGPA() << endl;
+	 << ", " << studentPtr->getID() << ", " << fixed << setprecision(2) << studentPtr->getGPA() << endl;
     ptr = ptr->getNext();
     print(ptr); //recursively call print function
   }
@@ -156,21 +142,22 @@ int main(){
       unique = checkID(id, head);
       if(unique == true){
 	student->setID(id);
+	cout << "Enter the GPA of the student. " << endl;
+	cout << " > "; //prompt input
+	cin >> gpa;
+	cin.get();
+	student->setGPA(gpa);
+	if(head == NULL){
+	  head = new Node(student);
+	}
+	else { //not head
+	//call add student, which will recursively call itself to find end of list
+	addStudent(head, student);
+	}
       }
       else {
 	cout << "That was not a unique student ID. Cannot add student. " << endl;
 	delete student;
-      }
-      cout << "Enter the GPA of the student. " << endl;
-      cout << " > "; //prompt input
-      cin >> gpa;
-      cin.get();
-      student->setGPA(gpa);
-      if(head == NULL){
-	head = new Node(student);
-      } else {
-	 //call add student, which will recursively call itself to find end of list
-	addStudent(head, student);
       }
     }
     else if(strcmp(input, "PRINT") == 0){
@@ -193,6 +180,7 @@ int main(){
 
 	//case: student id matches id of head, and there is nothing after it 
 	if(studentPtr->getID() == id && head != NULL && head->getNext() == NULL){ 
+	  cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
 	  Node *temp = head;
 	  head = NULL;
 	  delete temp;
@@ -200,6 +188,7 @@ int main(){
 
 	//case: student id matches id of head, but there are more nodes after
 	else if(studentPtr->getID() == id && head != NULL && head->getNext() != NULL){
+	  cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
 	  Node *temp = head; //create temp pointer to head
 	  head = head->getNext(); //change head to the next one
 	  delete temp; //delete original head
@@ -213,8 +202,7 @@ int main(){
     else if(strcmp(input, "AVERAGE") == 0){
       Average(head, 0, 0);
     }
-    
-  }
+  } //end while
   cout << "Now quitting. Goodbye! " << endl;
 
 }
