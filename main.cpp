@@ -196,17 +196,20 @@ int main(){
       } else { //head is not null
 	Student *studentPtr = head->getStudent();
 
-	if(studentPtr->getID() == id && head != NULL && head->getNext() == NULL){ //case: student id matches id of head, and there is nothing after it 
+	//case: student id matches id of head, and there is nothing after it 
+	if(studentPtr->getID() == id && head != NULL && head->getNext() == NULL){ 
 	  Node *temp = head;
 	  head = NULL;
 	  delete temp;
 	}
-	
-	else if(studentPtr->getID() == id && head != NULL && head->getNext() != NULL){ //case: student id matches id of head, but there are more nodes after
+
+	//case: student id matches id of head, but there are more nodes after
+	else if(studentPtr->getID() == id && head != NULL && head->getNext() != NULL){
 	  Node *temp = head; //create temp pointer to head
 	  head = head->getNext(); //change head to the next one
 	  delete temp; //delete original head
 	}
+	
 	else { //case: id does not match head
 	deleteStudent(head, id);
 	}
