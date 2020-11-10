@@ -1,6 +1,6 @@
 /* Author: Allison Delgado 
  * Contributor: Pranav Sharma (node.h and node.cpp)
- * Last updated: November 8, 2020
+ * Last updated: November 9, 2020
  */
 
 #include <iomanip>
@@ -15,47 +15,55 @@ void print(Node* &head);
 void deleteStudent(Node* current, int id);
 void Average(Node* next, float total, int count);
 bool checkID(int id, Node* &head);
+void quit();
 
+//prints out goodbye message
+void quit(){
+  cout << "Now quitting program. Goodbye!" << endl;
+}
 
+//prints average GPA of all students to 2 decimal places
 void Average(Node* next, float total, int count){
   float avg = 0.00;
   Node *traverse = next;
   if(traverse != NULL){
-    count++;
-    total += traverse->getStudent()->getGPA();
+    count++; //increase count
+    total += traverse->getStudent()->getGPA(); //add GPA's to toal
     //recursively call function
     Average(traverse->getNext(), total, count);
   } else {
+    //print out average once hit end of list
     avg = total/count;
     cout << "Average GPA: " << fixed << setprecision(2) << avg << endl;
   }
 }
 
+//checks if ID is unique (example, cannot have 2 students with ID 1).
+//returns bool true if ID is unique, false if not unique ID
 bool checkID(int id, Node* &head){
-
   Node *traverse = head;
-  if(traverse == NULL){ //first node in list
+  if(traverse == NULL){ //first node in list will always be unique
     return true;
   }
   while(traverse->getNext() != NULL){
-    traverse = traverse->getNext();
+    traverse = traverse->getNext(); //traverse through list
     if(traverse->getStudent()->getID() == id){
-      return false;
+      return false; //if id found matches inputted id, not unique
     }
   }
   return true;
 }
 
+//remove a node from the list
 void deleteStudent(Node* current, int id){
   Student *studentPtr = NULL;
-  char yn = 'y';
-  if(current->getNext() != NULL){
-    studentPtr = current->getNext()->getStudent();
-    if(studentPtr->getID() == id){
+  if(current->getNext() != NULL){ //while not hit end of list
+    studentPtr = current->getNext()->getStudent(); //create student pointer to access ID and other contents
+    if(studentPtr->getID() == id){ //found matching id
       Node *deletenode = current->getNext(); //temporary holder to delete the node
       cout << "now deleting " << studentPtr->getFirstName() << " " << studentPtr->getLastName() << endl;
       current->setNext(deletenode->getNext());
-      delete deletenode;   
+      delete deletenode;
     } else {
       deleteStudent(current->getNext(), id); //recursively call delete to traverse thru list
     }
@@ -68,7 +76,6 @@ void deleteStudent(Node* current, int id){
 
 //add a new student to linked list
 void addStudent(Node* head, Student *student){
-  
   //add into node
   Node* current = head;
 
@@ -86,11 +93,11 @@ void print(Node* &head){
   Student *studentPtr = NULL;
   
   if(ptr != NULL){
-    studentPtr = ptr->getStudent();
-    cout << studentPtr->getFirstName() << " " << studentPtr->getLastName()
+    studentPtr = ptr->getStudent(); //set student pointer to the student in the node
+    cout << studentPtr->getFirstName() << " " << studentPtr->getLastName() //print out its contents
 	 << ", " << studentPtr->getID() << ", " << fixed << setprecision(2) << studentPtr->getGPA() << endl;
-    ptr = ptr->getNext();
-    print(ptr); //recursively call print function
+    ptr = ptr->getNext(); //increment pointer to find next node
+    print(ptr); //recursively call print function passing in incremented node
   }
 }
 
@@ -98,13 +105,14 @@ void print(Node* &head){
 int main(){
   Node* head = NULL; //beginning of list
   Node *prev = NULL;
-  char input[10]; //holds either add or print currently
+  char input[10]; //holds either add, print, quit, average, or delete
   cout << "Welcome to (Linked) StudentList. " << endl;
   cout << "To add a student, type 'ADD'." << endl;
   cout << "To print out list, type 'PRINT'." << endl;
   cout << "To delete a student, type 'DELETE'." << endl;
   cout << "To average all student GPA's, type 'AVERAGE'." << endl;
   cout << "To quit, type 'QUIT'." << endl;
+
   //while they havent quit..
   while(strcmp(input, "QUIT") != 0){
     cout << "Enter a command (ADD/PRINT/DELETE/AVERAGE/QUIT)" << endl;
@@ -139,15 +147,15 @@ int main(){
       cout << " > "; //prompt input
       cin >> id;
       cin.get();
-      unique = checkID(id, head);
-      if(unique == true){
+      unique = checkID(id, head); //run through checkID function to make sure giving unique ID
+      if(unique == true){ //if it is unique, then add proceed and add student
 	student->setID(id);
 	cout << "Enter the GPA of the student. " << endl;
 	cout << " > "; //prompt input
 	cin >> gpa;
 	cin.get();
 	student->setGPA(gpa);
-	if(head == NULL){
+	if(head == NULL){ //create head if first time through
 	  head = new Node(student);
 	}
 	else { //not head
@@ -155,21 +163,25 @@ int main(){
 	addStudent(head, student);
 	}
       }
-      else {
+      else { //they entered an ID that is preexisting, delete progress of adding student
 	cout << "That was not a unique student ID. Cannot add student. " << endl;
 	delete student;
       }
     }
+    //call print function passing in head
     else if(strcmp(input, "PRINT") == 0){
       if(head!=NULL){
 	print(head);
       }
-      else {
+      else { //empty list
 	cout << " There is nothing in the list!"  << endl;
       }
     }
+
+    //delete a node
     else if(strcmp(input, "DELETE") == 0){
       int id = 0;
+      //get id of requested delete
       cout << "What is the ID of the student you would like to delete? " << endl;
       cin >> id;
       cin.get();
@@ -199,10 +211,11 @@ int main(){
 	}
       } 
     }
+    //print out average of all GPA's
     else if(strcmp(input, "AVERAGE") == 0){
-      Average(head, 0, 0);
+      Average(head, 0, 0); //Average() takes in (Node* next, float total, int count)
     }
   } //end while
-  cout << "Now quitting. Goodbye! " << endl;
+  quit();
 
 }

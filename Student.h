@@ -1,3 +1,5 @@
+//Author: Allison Delgado
+
 #include <iostream>
 class Student{
 public:
@@ -18,4 +20,5 @@ private:
   char lName[50];
   int id;
   float gpa;
+  
 };

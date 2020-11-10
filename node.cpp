@@ -1,6 +1,6 @@
 //created by Pranav Sharma
 
-#include "node.h"
+#include "Node.h"
 Node::Node(Student* ptr1) {
   /*value = new Student();
   value = ptr1;

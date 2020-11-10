@@ -42,6 +42,7 @@ Student::Student(){
 
 }
 
+//destructor
 Student::~Student(){
   
 }
