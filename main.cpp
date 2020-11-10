@@ -10,7 +10,7 @@
 using namespace std;
 
 //function prototypes
-void addStudent(Node* head, Student *student);
+void addStudent(Node* head, Student *student, int id);
 void print(Node* &head);
 void deleteStudent(Node* current, int id);
 void Average(Node* next, float total, int count);
@@ -75,15 +75,16 @@ void deleteStudent(Node* current, int id){
 
 
 //add a new student to linked list
-void addStudent(Node* head, Student *student){
+ void addStudent(Node* head, Student *student, int id){
   //add into node
   Node* current = head;
 
   if(current->getNext() == NULL){ //find end of list
     current->setNext(new Node(student));
+
   }
   else { //recursively call function again
-    addStudent(head->getNext(), student);
+    addStudent(head->getNext(), student, id);
   }
 }
 
@@ -160,7 +161,7 @@ int main(){
 	}
 	else { //not head
 	//call add student, which will recursively call itself to find end of list
-	addStudent(head, student);
+	  addStudent(head, student, id);
 	}
       }
       else { //they entered an ID that is preexisting, delete progress of adding student
