@@ -74,19 +74,19 @@ void deleteStudent(Node* current, int id){
 
 
 
-//add a new student to linked list
+//add a new student to linked list in ID order of least to greatest
 void addStudent(Node* head, Student *student){
    //this function is only called if head is not null
    Node* current = head;
-   //Node* prev = NULL;
 
+   //if next isnt null or next's id is greater than given id
    if (current->getNext() == NULL || current->getNext()->getStudent()->getID() > student->getID()) {
-     Node* temp = current->getNext();
-     Node* newnode = new Node(student);
+     Node* temp = current->getNext(); //save next node
+     Node* newnode = new Node(student); //create new node
      newnode->setNext(temp);
-     current->setNext(newnode);
+     current->setNext(newnode); //link up list
    }
-   else {
+   else { //recursively call function
      addStudent(current->getNext(), student);
    }
 }
