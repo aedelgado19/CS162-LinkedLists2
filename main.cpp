@@ -10,7 +10,7 @@
 using namespace std;
 
 //function prototypes
-void addStudent(Node* head, Student *student, int id);
+void addStudent(Node* head, Student *student);
 void print(Node* &head);
 void deleteStudent(Node* current, int id);
 void Average(Node* next, float total, int count);
@@ -75,17 +75,29 @@ void deleteStudent(Node* current, int id){
 
 
 //add a new student to linked list
- void addStudent(Node* head, Student *student, int id){
-  //add into node
-  Node* current = head;
-
-  if(current->getNext() == NULL){ //find end of list
-    current->setNext(new Node(student));
-
+void addStudent(Node* head, Student *student){
+   //this function is only called if head is not null
+   Node* current = head;
+   Node* prev = NULL;
+   
+   //case: given id is less than head
+   if(student->getID() < head->getStudent()->getID()){
+     Node *originalhead = new Node(head->getStudent()); //create a new node to store old head of list
+     originalhead->setNext(head->getNext()); 
+     head->setNext(originalhead); //set up new head with inputted student and link up list
+     head->setStudent(student);
   }
-  else { //recursively call function again
-    addStudent(head->getNext(), student, id);
-  }
+
+   //case: given id is greater than head
+   else if(student->getID() > current->getNext()->getStudent()->getID()){
+     Node *newnode = new Node(student);
+     //link up chain
+     newnode->setNext(prev->getNext()); //ALLy look here look here! add a previous pointer!
+     prev->setNext(newnode);
+   }
+   else{
+     addStudent(prev->getNext(), student);
+   }
 }
 
 //print out list
@@ -160,8 +172,8 @@ int main(){
 	  head = new Node(student);
 	}
 	else { //not head
-	//call add student, which will recursively call itself to find end of list
-	  addStudent(head, student, id);
+	//call add student, which will recursively call itself to store student in order of least to greatest id
+	  addStudent(head, student);
 	}
       }
       else { //they entered an ID that is preexisting, delete progress of adding student
