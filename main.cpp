@@ -79,25 +79,22 @@ void addStudent(Node* head, Student *student){
    //this function is only called if head is not null
    Node* current = head;
    Node* prev = NULL;
-   
-   //case: given id is less than head
-   if(student->getID() < head->getStudent()->getID()){
-     Node *originalhead = new Node(head->getStudent()); //create a new node to store old head of list
-     originalhead->setNext(head->getNext()); 
-     head->setNext(originalhead); //set up new head with inputted student and link up list
-     head->setStudent(student);
-  }
-
-   //case: given id is greater than head
-   else if(student->getID() > current->getNext()->getStudent()->getID()){
-     Node *newnode = new Node(student);
-     //link up chain
-     newnode->setNext(prev->getNext()); //ALLy look here look here! add a previous pointer!
-     prev->setNext(newnode);
+   while(current != NULL){
+     //if node to the right is smaller, call recursively addStudent() again
+     if(student->getID() > current->getStudent()->getID()){
+       prev = current;
+       addStudent(current->getNext(), student);
+     }
+  
+     //if node to right is bigger, then it has found where it goes
+     else if(student->getID() < current->getStudent()->getID()){
+       Node *newnode = new Node(student);
+       newnode->setNext(current);
+       prev->setNext(newnode);
+       newnode->setStudent(student);
+     }
    }
-   else{
-     addStudent(prev->getNext(), student);
-   }
+   // 1 2 3 4 6
 }
 
 //print out list
