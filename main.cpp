@@ -80,17 +80,32 @@ void addStudent(Node* head, Student *student){
    Node* current = head;
    Node* prev = NULL;
    while(current != NULL){
+     
+     //if biggest in list
+     if(student->getID() > current->getStudent()->getID() && current->getNext() == NULL){
+       Node *newnode = new Node(student);
+       cout << "biggest in list so far: " << student->getID() << endl;
+       newnode->setNext(NULL);
+       prev->setNext(newnode);
+       cout << "previous id: " << prev->getStudent()->getID() << endl;
+       newnode->setStudent(student);
+     }
+
      //if node to the right is smaller, call recursively addStudent() again
-     if(student->getID() > current->getStudent()->getID()){
+     else if(student->getID() > current->getStudent()->getID()){
        prev = current;
+       cout << "calling add student again" << endl;
        addStudent(current->getNext(), student);
      }
-  
      //if node to right is bigger, then it has found where it goes
      else if(student->getID() < current->getStudent()->getID()){
+       cout << "id of current: " << current->getStudent()->getID() << endl;
        Node *newnode = new Node(student);
+       cout << "id of new node: " << student->getID() << endl;
        newnode->setNext(current);
+       cout << "id of next to newnode" << newnode->getNext()->getStudent()->getID() << endl;
        prev->setNext(newnode);
+       cout << "previous id: " << prev->getStudent()->getID() << endl;
        newnode->setStudent(student);
      }
    }
