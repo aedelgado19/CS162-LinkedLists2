@@ -68,7 +68,7 @@ void deleteStudent(Node* current, int id){
       deleteStudent(current->getNext(), id); //recursively call delete to traverse thru list
     }
   } else { //current IS null
-    cout << "no students are in the list yet!" << endl;
+    cout << "Error: unknown student. " << endl;
   }
 }
 
@@ -78,41 +78,17 @@ void deleteStudent(Node* current, int id){
 void addStudent(Node* head, Student *student){
    //this function is only called if head is not null
    Node* current = head;
-   Node* prev = NULL;
-   while(current != NULL){
-     
-     //if biggest in list
-     if(student->getID() > current->getStudent()->getID() && current->getNext() == NULL){
-       Node *newnode = new Node(student);
-       prev = current;
-       cout << "biggest in list so far: " << student->getID() << endl;
-       newnode->setNext(NULL);
-       prev->setNext(newnode);
-       cout << "previous id: " << prev->getStudent()->getID() << endl;
-       newnode->setStudent(student);
-       return;
-     }
+   //Node* prev = NULL;
 
-     //if node to the right is smaller, call recursively addStudent() again
-     else if(student->getID() > current->getStudent()->getID() && current->getNext() != NULL){
-       prev = current;
-       cout << "calling add student again" << endl;
-       addStudent(current->getNext(), student);
-     }
-     //if node to right is bigger, then it has found where it goes
-     else if(student->getID() < current->getStudent()->getID()){
-       cout << "id of current: " << current->getStudent()->getID() << endl;
-       Node *newnode = new Node(student);
-       cout << "id of new node: " << student->getID() << endl;
-       newnode->setNext(current);
-       cout << "id of next to newnode" << newnode->getNext()->getStudent()->getID() << endl;
-       prev->setNext(newnode);
-       cout << "previous id: " << prev->getStudent()->getID() << endl;
-       newnode->setStudent(student);
-       return;
-     }
+   if (current->getNext() == NULL || current->getNext()->getStudent()->getID() > student->getID()) {
+     Node* temp = current->getNext();
+     Node* newnode = new Node(student);
+     newnode->setNext(temp);
+     current->setNext(newnode);
    }
-   // 1 2 3 4 6
+   else {
+     addStudent(current->getNext(), student);
+   }
 }
 
 //print out list
@@ -185,6 +161,11 @@ int main(){
 	student->setGPA(gpa);
 	if(head == NULL){ //create head if first time through
 	  head = new Node(student);
+	}
+	else if (id < head->getStudent()->getID()) {
+	  Node* temp = head;
+	  head = new Node(student);
+	  head->setNext(temp);
 	}
 	else { //not head
 	//call add student, which will recursively call itself to store student in order of least to greatest id
