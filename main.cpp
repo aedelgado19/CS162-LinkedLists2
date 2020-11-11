@@ -84,15 +84,17 @@ void addStudent(Node* head, Student *student){
      //if biggest in list
      if(student->getID() > current->getStudent()->getID() && current->getNext() == NULL){
        Node *newnode = new Node(student);
+       prev = current;
        cout << "biggest in list so far: " << student->getID() << endl;
        newnode->setNext(NULL);
        prev->setNext(newnode);
        cout << "previous id: " << prev->getStudent()->getID() << endl;
        newnode->setStudent(student);
+       return;
      }
 
      //if node to the right is smaller, call recursively addStudent() again
-     else if(student->getID() > current->getStudent()->getID()){
+     else if(student->getID() > current->getStudent()->getID() && current->getNext() != NULL){
        prev = current;
        cout << "calling add student again" << endl;
        addStudent(current->getNext(), student);
@@ -107,6 +109,7 @@ void addStudent(Node* head, Student *student){
        prev->setNext(newnode);
        cout << "previous id: " << prev->getStudent()->getID() << endl;
        newnode->setStudent(student);
+       return;
      }
    }
    // 1 2 3 4 6
